@@ -23,8 +23,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-2)aph_p04+$93eolt-ajzu4sri4hfgkg4xyd3l33sp_-vfzs_b'
 
-
-
 ABC2MIDI_PATH = os.path.join(BASE_DIR, 'abcmidi/abc2midi.exe')
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -134,6 +132,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

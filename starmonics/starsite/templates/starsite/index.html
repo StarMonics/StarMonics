@@ -1,117 +1,254 @@
 {% load static tailwind_tags %}
-{% load static %}
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Interface Melhorada com Navbar e Formulário</title>
-  <!-- Tailwind CSS -->
-  {% tailwind_css %}
+    <meta charset="UTF-8">
+    <title>STARMONICS</title>
+    <!-- Tailwind CSS -->
+    {% tailwind_css %}
+    <!-- Inclua a biblioteca Math.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.3.0/math.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/Home.module.css' %}">
 </head>
-<body class="bg-[#110022] text-white">
+<body class="bg-[#171323] text-white">
 
-  <!-- Navbar -->
-  <nav class="text-white p-4 flex items-center justify-between">
-    <div class="flex items-center ">
-      <img src="{% static 'Logo.png' %}" alt="Logo" class="h-8 w-8 mr-2">
-      <p class="text-xl font-semibold">STARMONICS</p>
+    <!-- Navbar -->
+    <nav class="text-white p-4 flex items-center justify-between">
+        <div class="flex items-center">
+            <img src="{% static 'Logo.png' %}" alt="Logo" class="h-8 w-8 mr-2">
+            <p class="text-xl font-semibold">STARMONICS</p>
+        </div>
+        <button id="menu-toggle" class="focus:outline-none">
+            <!-- Ícone do menu -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="white" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M2.5 12a.5.5 0 01.5-.5h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5zm0-4a.5.5 0 01.5-.5h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5zm0-4a.5.5 0 01.5-.5h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5z" clip-rule="evenodd"/>
+            </svg>
+        </button>
+    </nav>
+
+    <!-- Menu Offcanvas -->
+    <div id="offcanvas-menu" class="fixed inset-0 bg-gray-800 bg-opacity-75 z-50 transform translate-x-full transition-transform duration-300">
+        <div class="bg-gray-900 text-white w-64 h-full p-4">
+            <button id="menu-close" class="focus:outline-none mb-4">
+                <!-- Ícone de fechar -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="white" viewBox="0 0 16 16">
+                    <path d="M4.646 4.646a.5.5 0 011.414 0L8 7.293l2.646-2.647a.5.5 0 010 .708L9.414 8l2.646 2.646a.5.5 0 01-.708.708L8 8.707l-2.646 2.647a.5.5 0 01-.708-.708L6.586 8 4.646 5.354a.5.5 0 010-.708z"/>
+                </svg>
+            </button>
+            <h5 class="text-xl font-semibold mb-2">STARMONICS</h5>
+            <p class="mb-4">Sound of Silence</p>
+            <ul class="space-y-2">
+                <li><a href="#" class="hover:underline">MAIN</a></li>
+                <li><a href="#" class="hover:underline">SOBRE</a></li>
+            </ul>
+            <img src="{% static 'Logo.png' %}" alt="Logo" class="mt-4 h-16 w-16">
+        </div>
     </div>
-    <button id="menu-toggle" class="focus:outline-none">
-      <!-- Ícone do menu -->
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="white" viewBox="0 0 16 16">
-        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 01.5-.5h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5zm0-4a.5.5 0 01.5-.5h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5zm0-4a.5.5 0 01.5-.5h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5z" clip-rule="evenodd"/>
-      </svg>
-    </button>
-  </nav>
 
-  <!-- Menu Offcanvas -->
-  <div id="offcanvas-menu" class="fixed inset-0 bg-gray-800 bg-opacity-75 z-50 transform translate-x-full transition-transform duration-300">
-    <div class="bg-gray-900 text-white w-64 h-full p-4">
-      <button id="menu-close" class="focus:outline-none mb-4">
-        <!-- Ícone de fechar -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="white" viewBox="0 0 16 16">
-          <path d="M4.646 4.646a.5.5 0 011.414 0L8 7.293l2.646-2.647a.5.5 0 010 .708L9.414 8l2.646 2.646a.5.5 0 01-.708.708L8 8.707l-2.646 2.647a.5.5 0 01-.708-.708L6.586 8 4.646 5.354a.5.5 0 010-.708z"/>
-        </svg>
-      </button>
-      <h5 class="text-xl font-semibold mb-2">STARMONICS</h5>
-      <p class="mb-4">Sound of Silence</p>
-      <ul class="space-y-2">
-        <li><a href="#" class="hover:underline">MAIN</a></li>
-        <li><a href="#" class="hover:underline">SOBRE</a></li>
-      </ul>
-      <img src="{% static 'Logo.png' %}" alt="Logo" class="mt-4 h-16 w-16">
+    <!-- Seção Parallax -->
+    <div class="body-home">
+        <div class="quote-home">
+            <section class="section relative h-screen overflow-hidden">
+                
+                <!-- Elemento de Texto -->
+                <div id="typewriter-text" class="absolute flex items-center justify-center w-full h-1/4">
+                    <span id="animated-text" class="text-8xl font-bold">The sound of silence</span>
+                </div>
+                <!-- Imagens existentes -->
+                
+                <img src="{% static 'img/home/stars.png' %}" id="stars" alt="Estrelas" class="stars img absolute" style="top: 0; left: 0; width: 100%; height: 100%;">
+                <img src="{% static 'img/home/moon.png' %}" id="moon" alt="Lua" class="moon img absolute" style="top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
+                <img src="{% static 'img/home/blackhole.png' %}" id="blackhole" alt="Buraco Negro" class="blackhole img absolute" style="top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;">
+                <img src="{% static 'img/home/earth.png' %}" id="earth" alt="Terra" class="earth img absolute" style="top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
+
+                <!-- Div de Overlay -->
+                <div id="dark-overlay" class="absolute" style="top: 0; left: 0; width: 100%; height: 100%;"></div>
+
+
+                <!-- Elemento da Seta -->
+                <div id="scroll-indicator" class="absolute w-full flex justify-center" style="bottom: 100px;">
+                    <svg id="arrow" fill="#FFFFFF" height="5rem" width="5rem" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 330 330" xml:space="preserve"
+                        transform="matrix(-1, 0, 0, 1, 0, 0)rotate(90)">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <path id="XMLID_222_" d="M250.606,154.389l-150-149.996c-5.857-5.858-15.355-5.858-21.213,0.001
+                                c-5.857,5.858-5.857,15.355,0.001,21.213l139.393,139.39L79.393,304.394c-5.857,5.858-5.857,15.355,0.001,21.213
+                                C82.322,328.536,86.161,330,90,330s7.678-1.464,10.607-4.394l149.999-150.004c2.814-2.813,4.394-6.628,4.394-10.606
+                                C255,161.018,253.42,157.202,250.606,154.389z"></path>
+                        </g>
+                    </svg>
+                </div>
+
+            </section>
+        </div>
     </div>
-  </div>
 
-  <!-- Conteúdo Principal -->
-  <div class="container mx-auto my-8 px-4">
-    <div id="input">
-      <h2 class="text-2xl font-semibold mb-4">TEXTO</h2>
-      <p class="mb-4">Algo introdutório</p>
+    <!-- Conteúdo Principal -->
+    <div class="sec container mx-auto my-8 px-4">
+        <!-- Formulário -->
+        <div id="input" class="bg-white bg-opacity-10 p-8 rounded-lg shadow-lg">
+            <h2 class="text-3xl font-semibold mb-4 text-center">Envie sua imagem</h2>
+            <p class="mb-6 text-center">Faça upload de uma imagem para gerar uma descrição poética e uma música.</p>
+            <form method="post" action="#" enctype="multipart/form-data" class="flex flex-col items-center">
+                {% csrf_token %}
+                <input type="file" name="imagem" accept="image/*" class="border border-gray-300 p-2 mb-4 text-black w-full bg-white rounded-md">
+                <button type="submit" class="bg-indigo-600 text-white py-2 px-6 rounded-md hover:bg-indigo-700 transition-colors duration-300">Submeter</button>
+            </form>
+        </div>
+
+        <!-- Mensagem de Feedback e Imagem Enviada -->
+        {% if mensagem %}
+            <div class="mt-6 bg-green-500 bg-opacity-20 p-4 rounded-lg">
+                <p class="text-green-300 font-semibold">{{ mensagem }}</p>
+            </div>
+        {% endif %}
+        {% if caminho_imagem %}
+            <div class="mt-6 flex justify-center">
+                <img src="{{ caminho_imagem }}" alt="Imagem Enviada" class="border border-gray-300 rounded-lg shadow-md">
+            </div>
+        {% endif %}
+
+        <!-- Descrição Poética -->
+        {% if descricao_poetica %}
+            <div class="my-8 bg-white bg-opacity-10 p-6 rounded-lg">
+                <h2 class="text-2xl font-semibold mb-4">Descrição Poética</h2>
+                <p>{{ descricao_poetica }}</p>
+            </div>
+        {% endif %}
+
+        <!-- Música Gerada -->
+        {% if caminho_musica %}
+            <div class="my-8 bg-white bg-opacity-10 p-6 rounded-lg">
+                <h2 class="text-2xl font-semibold mb-4">Música Gerada</h2>
+                <audio controls class="w-full">
+                    <source src="{{ caminho_musica }}" type="audio/mpeg">
+                    Seu navegador não suporta o elemento de áudio.
+                </audio>
+            </div>
+        {% endif %}
     </div>
-  </div>
 
-<!-- Formulário -->
-<div class="container mx-auto my-8 px-4">
-    <form method="post" action="#" enctype="multipart/form-data" class="flex flex-col">
-        {% csrf_token %}
-        <input type="file" name="imagem" accept="image/*" class="border border-gray-300 p-2 mb-4">
-        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Submeter</button>
-    </form>
-</div>
-
-<!-- Mensagem de Feedback e Imagem Enviada -->
-<div class="container mx-auto my-8 px-4">
-    {% if mensagem %}
-        <p class="text-green-500 font-semibold mb-4">{{ mensagem }}</p>
-    {% endif %}
-    {% if caminho_imagem %}
-        <img src="{{ caminho_imagem }}" alt="Imagem Enviada" class="mt-4 border border-gray-300">
-    {% endif %}
-</div>
-
-{% if caminho_musica %}
+    <!-- Seção Sobre -->
     <div class="container mx-auto my-8 px-4">
-        <h2 class="text-2xl font-semibold mb-4">Música Gerada</h2>
-        <audio controls>
-            <source src="{{ caminho_musica }}" type="audio/mpeg">
-            Seu navegador não suporta o elemento de áudio.
-        </audio>
+        <div id="sobre">
+            <h2 class="text-2xl font-semibold mb-4">Sobre</h2>
+            <p>Aqui podemos falar um pouco sobre o nosso projeto.</p>
+        </div>
     </div>
-{% endif %}
 
-  <!-- Seção Sobre -->
-  <div class="container mx-auto my-8 px-4">
-    <div id="sobre">
-      <h2 class="text-2xl font-semibold mb-4">Sobre</h2>
-      <p>Aqui podemos falar um pouco sobre o nosso projeto.</p>
-    </div>
-  </div>
+    <!-- Rodapé -->
+    <footer class="bg-gray-800 text-white p-4 mt-8">
+        <h4 class="text-lg font-semibold mb-2">Créditos:</h4>
+        <img src="{% static 'Logo.png' %}" class="h-8 w-8 mb-2" alt="Logo">
+        <a href="#" class="hover:underline">Repositório GitHub</a>
+    </footer>
 
-  <!-- Rodapé -->
-  <footer class="bg-gray-800 text-white p-4 mt-8">
-    <h4 class="text-lg font-semibold mb-2">Créditos:</h4>
-    <img src="{% static 'Logo.png' %}" class="h-8 w-8 mb-2" alt="Logo">
-    <a href="#" class="hover:underline">Repositório GitHub</a>
-  </footer>
 
-  <!-- JavaScript para o Menu Offcanvas -->
-  <script>
-    const menuToggle = document.getElementById('menu-toggle');
-    const offcanvasMenu = document.getElementById('offcanvas-menu');
-    const menuClose = document.getElementById('menu-close');
 
-    menuToggle.addEventListener('click', () => {
-      offcanvasMenu.classList.remove('translate-x-full');
-      offcanvasMenu.classList.add('translate-x-0');
-    });
+    <!-- Scripts -->
+    <!-- JavaScript para o Menu Offcanvas -->
+    <script>
+        const menuToggle = document.getElementById('menu-toggle');
+        const offcanvasMenu = document.getElementById('offcanvas-menu');
+        const menuClose = document.getElementById('menu-close');
 
-    menuClose.addEventListener('click', () => {
-      offcanvasMenu.classList.remove('translate-x-0');
-      offcanvasMenu.classList.add('translate-x-full');
-    });
-  </script>
+        menuToggle.addEventListener('click', () => {
+            offcanvasMenu.classList.remove('translate-x-full');
+            offcanvasMenu.classList.add('translate-x-0');
+        });
+
+        menuClose.addEventListener('click', () => {
+            offcanvasMenu.classList.remove('translate-x-0');
+            offcanvasMenu.classList.add('translate-x-full');
+        });
+    </script>
+
+    <!-- Script de Parallax -->
+    <script>
+        let stars = document.getElementById('stars');
+        let moon = document.getElementById('moon');
+        let blackhole = document.getElementById('blackhole');
+        let darkOverlay = document.getElementById('dark-overlay'); // Novo elemento
+        
+        window.addEventListener('scroll', function(){
+            let width = window.innerWidth;
+            let height = window.innerHeight;
+            let w = 400;
+            let h = 80;
+            if (width < 950) {
+                h = width * 0.1;
+            }
+            let value = window.scrollY;
+            let distancia = math.eval("e^(" + value * 0.005 + "*i)");
+            moon.style.left = w * (distancia.re) - w + 'px';
+            moon.style.top = h * -distancia.im + 'px';
+            stars.style.left = value * 0.25 + 'px';
+        
+            // Atualizar a opacidade da div de overlay
+            let maxScroll = height; // Você pode ajustar esse valor conforme necessário
+            let opacity = Math.min(value / maxScroll, 1); // Limitar a opacidade entre 0 e 1
+            darkOverlay.style.opacity = opacity;
+        });
+        
+    </script>
+
+    <!-- Script de Typewriting -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const textElement = document.getElementById('animated-text');
+            const fullText = 'The sound of silence';
+            let currentIndex = 0;
+        
+            // Envolver cada caractere em um span
+            textElement.innerHTML = '';
+            for (let i = 0; i < fullText.length; i++) {
+                const span = document.createElement('span');
+                span.textContent = fullText[i];
+                span.style.opacity = '0';
+                textElement.appendChild(span);
+            }
+            const letters = textElement.querySelectorAll('span');
+        
+            function typeWriter() {
+                if (currentIndex < letters.length) {
+                    letters[currentIndex].style.opacity = '1';
+                    currentIndex++;
+                    setTimeout(typeWriter, 100); // Ajuste a velocidade de digitação aqui
+                } else {
+                    // Iniciar o fade aleatório após a digitação
+                    setTimeout(randomFade, 1000);
+                }
+            }
+        
+            function randomFade() {
+                const indices = [];
+                for (let i = 0; i < letters.length; i++) {
+                    indices.push(i);
+                }
+        
+                function fadeLetter() {
+                    if (indices.length === 0) {
+                        // Reiniciar o array de índices quando todas as letras tiverem sido animadas
+                        for (let i = 0; i < letters.length; i++) {
+                            indices.push(i);
+                        }
+                    }
+                    const randomIndex = indices.splice(Math.floor(Math.random() * indices.length), 1)[0];
+                    const letter = letters[randomIndex];
+                    letter.style.opacity = '0.3'; // Reduz a opacidade
+                    setTimeout(() => {
+                        letter.style.opacity = '1';
+                    }, 500); // Tempo que a letra permanece com baixa opacidade
+                    setTimeout(fadeLetter, Math.random() * 800 + 200); // Intervalo entre as animações
+                }
+        
+                fadeLetter();
+            }
+        
+            typeWriter();
+        });
+    </script>
 </body>
 </html>

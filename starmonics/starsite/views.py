@@ -10,6 +10,10 @@ from django.conf import settings
 import os 
 import openai
 
+import subprocess
+from pydub import AudioSegment
+from pydub.effects import normalize
+
 
 def home(request):
     mensagem = ''
@@ -36,6 +40,19 @@ def home(request):
     })
     
     
+def make_midi_image(api_key, input_text, tone_sequence, tempo):
+    finished = False
+
+
+    while finished == False:
+        song_maker = SongMaker(api_key, input_text, tone_sequence, tempo)
+        song = song_maker.make_song()
+        song_abc = song['choices'][0]['message']['content'][3:][:-4].replace('\n', '''
+                                                                             ''')
+        finished = song_maker.make_midi(song_abc)
+    
+    return finished
+        
 def generateMusic(imagem):
     
     fs = FileSystemStorage()
@@ -69,37 +86,82 @@ def generateMusic(imagem):
             print(f"Image: {description['image_name']}")
             print(f"Description: {description['description']}\n")
 
-        song_maker = SongMaker(API_KEY, description, tone_sequence, tempo)
-        
-        song_response = song_maker.make_song()
-        
-        if 'choices' in song_response and song_response['choices']:
-            song_abc_content = song_response['choices'][0]['message']['content']
-            
-            # Salvar o conteúdo ABC em um arquivo
-            abc_file_name = 'song.abc'
-            abc_file_path = os.path.join(settings.MEDIA_ROOT, abc_file_name)
-            with open(abc_file_path, 'w') as abc_file:
-                abc_file.write(song_abc_content)
-            
-            # Converter o ABC para MIDI e depois para MP3
-            midi_file_name = 'song.mid'
-            midi_file_path = os.path.join(settings.MEDIA_ROOT, midi_file_name)
-            # mp3_file_name = 'song.mp3'
-            # mp3_file_path = os.path.join(settings.MEDIA_ROOT, mp3_file_name)
-            
-            # Converter ABC para MIDI
-            song_maker.abc_to_midi(abc_file_path, midi_file_path)
-            
-            # Converter MIDI para MP3
-            # song_maker.midi_to_mp3(midi_file_path, mp3_file_path)
-            
-            # Obter o caminho do MP3 para passar ao template
-            caminho_musica = fs.url(midi_file_name)
-            
-            return caminho_imagem, description, caminho_musica
-        else:
-            mensagem = 'Não foi possível gerar a música.'
+
+        midi_filepath = make_midi_image(API_KEY, description, tone_sequence, tempo)
         
         
+        output_wav_file = os.path.join(settings.MEDIA_ROOT, "output_song_with_effects.wav")
+        soundfont = settings.SOUNDFONT_PATH
+        
+        process_midi(midi_filepath, soundfont, output_wav_file)
+        
+        return caminho_imagem, description, output_wav_file
+        
+        
+        
+# Step 1: Convert MIDI to WAV using FluidSynth
+def midi_to_wav(midi_file, soundfont, output_file):
+    """
+    Converts a MIDI file to WAV using FluidSynth.
+    """
+    # FluidSynth command to convert MIDI to WAV
+    print(midi_file)
+    command = [
+        "fluidsynth",
+        "-ni", soundfont,  # Use the specified soundfont
+        midi_file,
+        "-F", output_file,  # Output WAV file
+        "-r", "44100"  # Sample rate
+    ]
+    
+    # Execute the command
+    subprocess.run(command, check=True)
+
+# Step 2: Apply reverb using sox
+def apply_reverb(wav_file, output_file):
+    """
+    Applies reverb to a WAV file using the sox tool.
+    """
+    # Sox command to apply reverb
+    command = [
+        "sox", wav_file, output_file, "reverb"
+    ]
+    
+    # Execute the command
+    subprocess.run(command, check=True)
+
+# Step 3: Apply normalization and other effects
+def apply_effects(wav_file, output_file):
+    """
+    Normalizes the audio file after reverb.
+    """
+    # Load the WAV file
+    audio = AudioSegment.from_wav(wav_file)
+    
+    # Normalize the audio (optional but ensures even levels)
+    normalized_audio = normalize(audio)
+    
+    # Export the final output to WAV
+    normalized_audio.export(output_file, format="wav")
+
+# Step 4: Convert MIDI to WAV, apply reverb and normalization
+def process_midi(midi_input, soundfont, output_wav):
+    temp_wav = "temp_output.wav"  # Temporary file to hold the initial WAV output
+    temp_with_reverb = "temp_with_reverb.wav"  # Temporary file for reverb
+
+    # Convert MIDI to WAV
+    midi_to_wav(midi_input, soundfont, temp_wav)
+
+    # Apply reverb using sox
+    apply_reverb(temp_wav, temp_with_reverb)
+
+    # Apply normalization and export as final WAV
+    apply_effects(temp_with_reverb, output_wav)
+
+    # Clean up temporary files
+    os.remove(temp_wav)
+    os.remove(temp_with_reverb)
+# Example usage
+
+
         

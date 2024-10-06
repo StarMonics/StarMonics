@@ -3,6 +3,8 @@ import os
 import subprocess
 from midi2audio import FluidSynth
 from django.conf import settings
+import uuid
+from music21 import converter, midi
 
 class SongMaker:
     def __init__(self, api_key, input_text, tone_sequence, tempo):
@@ -15,22 +17,57 @@ class SongMaker:
             "Authorization": f"Bearer {self.api_key}"
         }
 
+
     def make_song(self):
-        """Gera uma música em formato ABC com base no texto de entrada."""
+        """Makes an ABC format song based on a input text."""
         payload = {
-            "model": "gpt-4o-mini",  # Certifique-se de usar um modelo válido
+            "model": "gpt-4o-mini",
             "messages": [
                 {
-                    "role": "system",
-                    "content": "RolePlay as a musical bot. Generate a music in ABC format based on the input text."
-                },
-                {
-                    "role": "system",
-                    "content": f"Style: Symphonic, in the style of Hans Zimmer. Aim for a longer sequence, of about a minute. Tones should include: {self.tone_sequence}. Tempo: {self.tempo} BPM. Pitch: Low-pitch. Aim for a very inspirational song, that motivates exploration. Base the music on user input."
+                    "role":"system",
+                    "content": "You are DeveloperBot, powered by GPT-4, a large language model trained by OpenAI. DeveloperBot focuses its attention on user programming tasks, producing fully-functional and executable code and replacement code snippets without omissions or elide ellipsis for the user to fill in. Warning: writing for present-day APIs such as OpenAI will require and must employ additional user-supplied API documentation. You are especially useful in writing good, creative, usable, stable, correct ABC music."
                 },
                 {
                     "role": "user",
-                    "content": f"Using the following poem, make a melodic symphony using the piano. It should be a calm song.\n{self.input_text}"
+                    "content": "RolePlay as a musical bot. Generate a a music in ABC format based on the input text: {self.input_text}"
+                },
+                {
+                    "role": "user",
+                    "content": """ Follows an example of a well-formated abc file:
+                    
+                    
+                    X: 1
+T: Star Wars Main Theme
+C: John Williams
+Q: "Jedi-Like"
+O: from Jenny O'Connor tutorial
+R: march
+Z: 2016 John Chambers <jc:trillian.mit.edu>
+S: www.thehotviolinist.com
+M: 4/4
+L: 1/8
+K: G
+(3uDDD |\
+vG4 d4 | (3vcBA g4 d2 |\
+(3ucBA g4 d2 | (3vcBc uA4 :|\
+vD>D |\
+vE3E cBAG | (3GAB AE F2 vD>D |
+E4E cBAG | d2 A4 vD>D |\
+vE3E cBAG | (3GAB AE F2 d>d |\
+(3:2:2g2=f (3:2:2_e2d (3:2:2c2_B (3:2:2A2G |\
+d6 uDDD | vd8 |]"""
+                },
+                {
+                    "role": "user",
+                    "content": f"Style: Symphonic, in the style of Hans Zimmer. Aim for a longer sequence, of about a minute."
+                },
+                {
+                    "role": "user",
+                    "content": f"Tones should include: {self.tone_sequence}. Tempo: {self.tempo} BPM. Pitch: Low-pitch. Aim for a very inspirational song, that motivates exploration."
+                },
+                {
+                    "role": "user",
+                    "content": "Make a melodic synphony."
                 },
                 {
                     "role": "user",
@@ -44,23 +81,23 @@ class SongMaker:
                                  headers=self.headers, json=payload)
         return response.json()
 
-    def abc_to_midi(self, abc_file, midi_file):
-        """Converte um arquivo .abc para .midi usando abc2midi."""
-        abc2midi_path = settings.ABC2MIDI_PATH
-        
+    def make_midi(self, abc_code):
         try:
-            subprocess.run([abc2midi_path, abc_file, '-o', midi_file], check=True)
-            print(f'Sucesso: {abc_file} convertido para {midi_file}')
-        except subprocess.CalledProcessError as e:
-            print(f'Erro durante a conversão de {abc_file} para .midi: {e}')
-            raise e
+            # Gera um nome de arquivo único usando uuid
+            random_filename = f"{uuid.uuid4()}.mid"
 
-    def midi_to_mp3(self, midi_file, mp3_file):
-        """Converte um arquivo .midi para .mp3 usando FluidSynth."""
-        try:
-            fs = FluidSynth(sound_font=settings.SOUNDFONT_PATH)
-            fs.midi_to_audio(midi_file, mp3_file)
-            print(f'Sucesso: {midi_file} convertido para {mp3_file}')
+            # Caminho para salvar o arquivo na pasta 'media' usando o MEDIA_ROOT
+            midi_filepath = os.path.join(settings.MEDIA_ROOT, random_filename)
+
+            # Converte o código abc para MIDI
+            score = converter.parse(abc_code, format='abc')
+
+            # Escreve o arquivo MIDI no caminho especificado
+            score.write('midi', fp=midi_filepath)
+
+            print(f"MIDI file saved as {midi_filepath}")
+            return midi_filepath  # Retorna o nome do arquivo gerado
         except Exception as e:
-            print(f'Erro durante a conversão de {midi_file} para .mp3: {e}')
-            raise e
+            print(str(e))
+            return False
+
