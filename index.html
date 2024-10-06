@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interface Melhorada com Navbar e Formulário</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar-ativo">
+    <img src="Logo.png" alt="Logo" class="imagem-navbar">
+    <p class="titulo-navbar">STARMONICS</p>
+    <button class="botao-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="white" class="bi bi-list" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+      </svg>
+    </button>
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      <svg type="button" data-bs-dismiss="offcanvas" aria-label="Close" xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="white" class="bi bi-x" viewBox="0 0 16 16">
+        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+      </svg>
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">STARMONICS</h5>
+      <p>Sound of Silence</p>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+          <li class="nav-item">
+            <a class="nav-link" href="#">MAIN</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">SOBRE</a>
+          </li>
+        </ul>
+
+      </div>
+      <img src="Logo.png" alt="Logo" class="imagem-offcanvas">
+    </div>
+</nav>
+  <div class="corpo">
+    <div class="section-content" id="input">
+      <h2>TEXTO</h2>
+      <p>Algo introdutório</p>
+    </div>
+  </div>
+  <div class="form-container">
+    <form class="custom-form">
+      <input type="text" class="form-control" placeholder="Digite sua mensagem...">
+       <form method="get" action="teste.html">
+        <button type="submit" class="btn btn-primary">Submeter</button>
+       </form>
+    </form>
+  </div>
+  <div class="corpo">
+    <div class="section-content" id="sobre">
+      <h2>Sobre</h2>
+      <p>Aqui podemos falar um pouco sobre o nosso projeto.</p>
+    </div>
+  </div>
+  <footer class="footer">
+    <h4>
+      Créditos:
+    </h4>
+    <img src="Logo.png" class="imagem-footer"> </img>
+    <a href="">
+      Repositório GitHub
+    </a>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
