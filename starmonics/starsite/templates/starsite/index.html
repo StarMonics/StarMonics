@@ -1,0 +1,117 @@
+{% load static tailwind_tags %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interface Melhorada com Navbar e Formulário</title>
+  <!-- Tailwind CSS -->
+  {% tailwind_css %}
+</head>
+<body class="bg-[#110022] text-white">
+
+  <!-- Navbar -->
+  <nav class="text-white p-4 flex items-center justify-between">
+    <div class="flex items-center ">
+      <img src="{% static 'Logo.png' %}" alt="Logo" class="h-8 w-8 mr-2">
+      <p class="text-xl font-semibold">STARMONICS</p>
+    </div>
+    <button id="menu-toggle" class="focus:outline-none">
+      <!-- Ícone do menu -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="white" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 01.5-.5h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5zm0-4a.5.5 0 01.5-.5h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5zm0-4a.5.5 0 01.5-.5h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5z" clip-rule="evenodd"/>
+      </svg>
+    </button>
+  </nav>
+
+  <!-- Menu Offcanvas -->
+  <div id="offcanvas-menu" class="fixed inset-0 bg-gray-800 bg-opacity-75 z-50 transform translate-x-full transition-transform duration-300">
+    <div class="bg-gray-900 text-white w-64 h-full p-4">
+      <button id="menu-close" class="focus:outline-none mb-4">
+        <!-- Ícone de fechar -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="white" viewBox="0 0 16 16">
+          <path d="M4.646 4.646a.5.5 0 011.414 0L8 7.293l2.646-2.647a.5.5 0 010 .708L9.414 8l2.646 2.646a.5.5 0 01-.708.708L8 8.707l-2.646 2.647a.5.5 0 01-.708-.708L6.586 8 4.646 5.354a.5.5 0 010-.708z"/>
+        </svg>
+      </button>
+      <h5 class="text-xl font-semibold mb-2">STARMONICS</h5>
+      <p class="mb-4">Sound of Silence</p>
+      <ul class="space-y-2">
+        <li><a href="#" class="hover:underline">MAIN</a></li>
+        <li><a href="#" class="hover:underline">SOBRE</a></li>
+      </ul>
+      <img src="{% static 'Logo.png' %}" alt="Logo" class="mt-4 h-16 w-16">
+    </div>
+  </div>
+
+  <!-- Conteúdo Principal -->
+  <div class="container mx-auto my-8 px-4">
+    <div id="input">
+      <h2 class="text-2xl font-semibold mb-4">TEXTO</h2>
+      <p class="mb-4">Algo introdutório</p>
+    </div>
+  </div>
+
+<!-- Formulário -->
+<div class="container mx-auto my-8 px-4">
+    <form method="post" action="#" enctype="multipart/form-data" class="flex flex-col">
+        {% csrf_token %}
+        <input type="file" name="imagem" accept="image/*" class="border border-gray-300 p-2 mb-4">
+        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Submeter</button>
+    </form>
+</div>
+
+<!-- Mensagem de Feedback e Imagem Enviada -->
+<div class="container mx-auto my-8 px-4">
+    {% if mensagem %}
+        <p class="text-green-500 font-semibold mb-4">{{ mensagem }}</p>
+    {% endif %}
+    {% if caminho_imagem %}
+        <img src="{{ caminho_imagem }}" alt="Imagem Enviada" class="mt-4 border border-gray-300">
+    {% endif %}
+</div>
+
+{% if caminho_musica %}
+    <div class="container mx-auto my-8 px-4">
+        <h2 class="text-2xl font-semibold mb-4">Música Gerada</h2>
+        <audio controls>
+            <source src="{{ caminho_musica }}" type="audio/mpeg">
+            Seu navegador não suporta o elemento de áudio.
+        </audio>
+    </div>
+{% endif %}
+
+  <!-- Seção Sobre -->
+  <div class="container mx-auto my-8 px-4">
+    <div id="sobre">
+      <h2 class="text-2xl font-semibold mb-4">Sobre</h2>
+      <p>Aqui podemos falar um pouco sobre o nosso projeto.</p>
+    </div>
+  </div>
+
+  <!-- Rodapé -->
+  <footer class="bg-gray-800 text-white p-4 mt-8">
+    <h4 class="text-lg font-semibold mb-2">Créditos:</h4>
+    <img src="{% static 'Logo.png' %}" class="h-8 w-8 mb-2" alt="Logo">
+    <a href="#" class="hover:underline">Repositório GitHub</a>
+  </footer>
+
+  <!-- JavaScript para o Menu Offcanvas -->
+  <script>
+    const menuToggle = document.getElementById('menu-toggle');
+    const offcanvasMenu = document.getElementById('offcanvas-menu');
+    const menuClose = document.getElementById('menu-close');
+
+    menuToggle.addEventListener('click', () => {
+      offcanvasMenu.classList.remove('translate-x-full');
+      offcanvasMenu.classList.add('translate-x-0');
+    });
+
+    menuClose.addEventListener('click', () => {
+      offcanvasMenu.classList.remove('translate-x-0');
+      offcanvasMenu.classList.add('translate-x-full');
+    });
+  </script>
+</body>
+</html>
