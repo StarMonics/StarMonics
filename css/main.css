@@ -1,8 +1,13 @@
 
- body {
+  html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
     padding-top: 120px;
     background-color: #110022;
-  }
+    margin: 0;
+}
   .navbar{
     border-bottom: solid 2px #79FBEC;
     display: flex;
@@ -10,7 +15,7 @@
     justify-content: space-between;
     flex-wrap: wrap;
     align-items: center;
-    padding: 20px;
+    padding-left: 20px;
     padding-right: 36px;
     transition: 1;
     display: none;
@@ -22,7 +27,7 @@
     flex-direction: row;
     justify-content: space-between;
     flex-wrap: wrap;
-    padding: 20px;
+    padding-left: 20px;
     padding-right: 36px;
     align-items: center;
     transition: 1;
@@ -103,33 +108,19 @@
     padding-right: 10px;
     width: 63px;
   }
-  .form-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 100px;
-  }
-  .custom-form {
-    width: 60%;
-    display: flex;
-  }
-  .custom-form input {
-    flex-grow: 1; 
-    margin-right: 10px;
-    background-color: grey;
-    border-color: black;
-  }
+
   .section-content {
     color: white;
-    padding: 20px;
+    padding: 40px;
   }
   .btn{
     margin-top: 10px;
     background-color: #110022;
-    border-color: #79FBEC;
+    border-color: #99B6FF;
   }
   .btn:hover{
-    background-color: #79FBEC;
-    border-color: #ffff;
+    background-color: #99B6FF;
+    border-color: #79FBEC;
     color: #110022;
   }
   .btn::after{
@@ -137,26 +128,39 @@
     background-color: #110022;
     border-color: #79FBEC;
   }
-  .footer{
-    display: grid;
+  .footer {
+    display: flex;
+    position: relative;
+    left: 0;
+    bottom: 0;
+    background-color: #0000;
+    border-top: solid 2px #C08EFD;
     width: 100%;
-    background-color: black;
-    padding: 60px;
-    color: grey;
-  }
+    text-align: center;
+    color: #ffff;
+    padding: 20px;
+    margin-top: 50px;
+}
   .footer a{
+    margin-top: 15px;
+    display: block;
+    font-size: 0.7em;
     text-decoration: none;
-    color: grey;
+    color: #ffff;
   }
   .footer a:hover{
+    margin-top: 15px;
+    display: block;
+    font-size: 0.7em;
     text-decoration: underline;
-    color: grey;
+    color: #ffff;
   }
   .imagem-footer{
     position: absolute;
-    right: 20px;
+    right: 0;
     width: 72px;
   }
+
   .upload-container {
     background-color: #110022;
     padding: 20px;
@@ -164,6 +168,9 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
     color: #ffff;
+    padding-bottom: 40px;
+    margin-bottom: 40px;
+    border-bottom:solid 2px #99B6FF;
   }
 
   .upload-container input[type="file"] {
@@ -182,5 +189,5 @@
   }
   
   .hidden-input {
-    display: none; /* Esconde o input padrão */
+    display: none; 
   }
