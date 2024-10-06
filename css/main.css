@@ -123,6 +123,7 @@
     padding: 20px;
   }
   .btn{
+    margin-top: 10px;
     background-color: #110022;
     border-color: #79FBEC;
   }
@@ -130,6 +131,11 @@
     background-color: #79FBEC;
     border-color: #ffff;
     color: #110022;
+  }
+  .btn::after{
+    margin-top: 10px;
+    background-color: #110022;
+    border-color: #79FBEC;
   }
   .footer{
     display: grid;
@@ -151,13 +157,30 @@
     right: 20px;
     width: 72px;
   }
-  @media screen and (min-width: 1440px) {
-    .titulo-navbar{
-      color: #ffff;
-      padding-top: 0.3em;
-      text-align: center;
-      font-family: 'Open Sans';
-      font-weight: bold;
-      font-size: 18px;
-    }
+  .upload-container {
+    background-color: #110022;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    color: #ffff;
+  }
+
+  .upload-container input[type="file"] {
+    margin: 10px 0;
+  }
+
+  .preview {
+    margin-top: 20px;
+  }
+
+  .preview img {
+    max-width: 100%;
+    max-height: 300px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .hidden-input {
+    display: none; /* Esconde o input padrão */
   }
