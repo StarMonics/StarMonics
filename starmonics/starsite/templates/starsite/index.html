@@ -1,4 +1,5 @@
 {% load static tailwind_tags %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -59,7 +60,7 @@
                 <img src="{% static 'img/home/stars.png' %}" id="stars" alt="Estrelas" class="stars img absolute" style="top: 0; left: 0; width: 100%; height: 100%;">
                 <img src="{% static 'img/home/moon.png' %}" id="moon" alt="Lua" class="moon img absolute" style="top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
                 <img src="{% static 'img/home/blackhole.png' %}" id="blackhole" alt="Buraco Negro" class="blackhole img absolute" style="top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;">
-                <img src="{% static 'img/home/earth.png' %}" id="earth" alt="Terra" class="earth img absolute" style="top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
+                <img src="{% static 'img/home/terra.png' %}" id="earth" alt="Terra" class="earth img absolute" style="top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
 
                 <!-- Div de Overlay -->
                 <div id="dark-overlay" class="absolute" style="top: 0; left: 0; width: 100%; height: 100%;"></div>
@@ -85,12 +86,88 @@
         </div>
     </div>
 
+    <!-- Conteúdo Principal
+    <div class="sec mx-auto my-8 px-4">
+        <div class="sec-content">
+            
+            <div id="input" class="bg-white bg-opacity-10 p-8 rounded-lg shadow-lg">
+                <h2 class="text-3xl font-semibold mb-4 text-center">Envie sua imagem</h2>
+                <p class="mb-6 text-center">Faça upload de uma imagem para gerar uma descrição poética e uma música.</p>
+                <form method="post" action="#" enctype="multipart/form-data" class="flex flex-col items-center">
+                    {% csrf_token %}
+                    <input type="file" name="imagem" accept="image/*" class="border border-gray-300 p-2 mb-4 text-black w-full bg-white rounded-md">
+                    <button type="submit" class="bg-indigo-600 text-white py-2 px-6 rounded-md hover:bg-indigo-700 transition-colors duration-300">Submeter</button>
+                </form>
+            </div>
+
+           
+            {% if mensagem %}
+                <div class="mt-6 bg-green-500 bg-opacity-20 p-4 rounded-lg">
+                    <p class="text-green-300 py-4 font-semibold">{{ mensagem }}</p>
+                </div>
+            {% endif %}
+            {% if caminho_imagem %}
+                <div class="mt-6 flex justify-center">
+                    <img src="{{ caminho_imagem }}" alt="Imagem Enviada" class="border py-4 border-gray-300 rounded-lg shadow-md">
+                </div>
+            {% endif %}
+
+            
+            {% if descricao_poetica %}
+                <div class="my-8 bg-white bg-opacity-10 p-6 rounded-lg">
+                    <h2 class="text-2xl font-semibold mb-4">Descrição Poética</h2>
+                    <p>{{ descricao_poetica }}</p>
+                </div>
+            {% endif %}
+
+            
+            {% if caminho_musica %}
+                <div class="my-8 bg-white bg-opacity-10 p-6 rounded-lg">
+                    <h2 class="text-2xl font-semibold mb-4">Música Gerada</h2>
+                    <audio controls class="w-full py-4">
+                        <source src="{{ caminho_musica }}" type="audio/mpeg">
+                        Seu navegador não suporta o elemento de áudio.
+                    </audio>
+                </div>
+            {% endif %}
+      </div>
+    </div> -->
+
     <!-- Conteúdo Principal -->
-    <div class="sec container mx-auto my-8 px-4">
-        <!-- Formulário -->
-        <div id="input" class="bg-white bg-opacity-10 p-8 rounded-lg shadow-lg">
-            <h2 class="text-3xl font-semibold mb-4 text-center">Envie sua imagem</h2>
-            <p class="mb-6 text-center">Faça upload de uma imagem para gerar uma descrição poética e uma música.</p>
+    <div class="sec mx-auto my-0 px-4 h-full">
+        <div class="sec-content">
+        <!-- Grid de Duas Colunas -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Coluna da Imagem -->
+            <div class="flex justify-center items-center">
+                {% if caminho_imagem %}
+                    <div class="bg-white bg-opacity-10 p-2 rounded-lg shadow-lg">
+                        <img src="{{ caminho_imagem }}" alt="Imagem Enviada" class="max-w-full h-auto rounded-md">
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Coluna da Descrição e Música -->
+            <div class="flex flex-col justify-center">
+                {% if descricao_poetica %}
+                    <div class="mb-6 bg-white bg-opacity-10 p-6 rounded-lg">
+                        <p class="text-5xl font-semibold mb-4">Poetry of the Stars</h2>
+                        <p class="py-2">{{ descricao_poetica }}</p>
+
+                        <audio controls class="w-full">
+                            <source src="{{ caminho_musica }}" type="audio/mpeg">
+                            Your browser doesn't support audio element.
+                        </audio>
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+
+        <!-- Formulário de Envio -->
+        <div id="input" class="bg-white bg-opacity-10 p-8 rounded-lg shadow-lg mt-8">
+            <h2 class="text-3xl font-semibold mb-4 text-center">Send your image</h2>
+            <p class="mb-6 text-center">Upload an image to generate a poetic description and song.</p>
             <form method="post" action="#" enctype="multipart/form-data" class="flex flex-col items-center">
                 {% csrf_token %}
                 <input type="file" name="imagem" accept="image/*" class="border border-gray-300 p-2 mb-4 text-black w-full bg-white rounded-md">
@@ -98,36 +175,13 @@
             </form>
         </div>
 
-        <!-- Mensagem de Feedback e Imagem Enviada -->
+        <!-- Mensagem de Feedback -->
         {% if mensagem %}
             <div class="mt-6 bg-green-500 bg-opacity-20 p-4 rounded-lg">
                 <p class="text-green-300 font-semibold">{{ mensagem }}</p>
             </div>
         {% endif %}
-        {% if caminho_imagem %}
-            <div class="mt-6 flex justify-center">
-                <img src="{{ caminho_imagem }}" alt="Imagem Enviada" class="border border-gray-300 rounded-lg shadow-md">
-            </div>
-        {% endif %}
-
-        <!-- Descrição Poética -->
-        {% if descricao_poetica %}
-            <div class="my-8 bg-white bg-opacity-10 p-6 rounded-lg">
-                <h2 class="text-2xl font-semibold mb-4">Descrição Poética</h2>
-                <p>{{ descricao_poetica }}</p>
-            </div>
-        {% endif %}
-
-        <!-- Música Gerada -->
-        {% if caminho_musica %}
-            <div class="my-8 bg-white bg-opacity-10 p-6 rounded-lg">
-                <h2 class="text-2xl font-semibold mb-4">Música Gerada</h2>
-                <audio controls class="w-full">
-                    <source src="{{ caminho_musica }}" type="audio/mpeg">
-                    Seu navegador não suporta o elemento de áudio.
-                </audio>
-            </div>
-        {% endif %}
+    </div>
     </div>
 
     <!-- Seção Sobre -->

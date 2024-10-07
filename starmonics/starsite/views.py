@@ -1,14 +1,15 @@
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
 from django.core.exceptions import ValidationError
-
+from django.utils.safestring import mark_safe
 from .tools.extract_features import process_image
 from .tools.poetic_description import ImageInterpreter
 from .tools.song_maker import SongMaker
-
+import uuid
 from django.conf import settings
 import os 
-import openai
+# import openai
+
 
 import subprocess
 from pydub import AudioSegment
@@ -30,12 +31,13 @@ def home(request):
             else:
 
                 caminho_imagem, descricao_poetica, caminho_musica = generateMusic(imagem)
+                
 
                     
     return render(request, 'starsite/index.html', {
         'mensagem': mensagem,
         'caminho_imagem': caminho_imagem,
-        'descricao_poetica': descricao_poetica,
+        'descricao_poetica': mark_safe(descricao_poetica.replace("\n", "<br>")),
         'caminho_musica': caminho_musica
     })
     
@@ -89,13 +91,22 @@ def generateMusic(imagem):
 
         midi_filepath = make_midi_image(API_KEY, description, tone_sequence, tempo)
         
-        
-        output_wav_file = os.path.join(settings.MEDIA_ROOT, "output_song_with_effects.wav")
+        temp_name = str(uuid.uuid4())
+        output_wav_file = os.path.join(settings.MEDIA_ROOT, temp_name+"output_song_with_effects.wav")
+        path_relative = temp_name+"output_song_with_effects.wav"
         soundfont = settings.SOUNDFONT_PATH
         
-        process_midi(midi_filepath, soundfont, output_wav_file)
+        process_midi(midi_filepath, soundfont, output_wav_file, temp_name)
         
-        return caminho_imagem, description, output_wav_file
+        # Verifica se o arquivo WAV foi criado corretamente
+        if not os.path.exists(output_wav_file):
+            print(f"Erro: Arquivo WAV {output_wav_file} não foi criado.")
+            return caminho_imagem, description, ''
+
+        # Converte o caminho do arquivo para uma URL acessível
+        caminho_musica = fs.url(path_relative)
+        
+        return caminho_imagem, description["description"], caminho_musica
         
         
         
@@ -105,7 +116,6 @@ def midi_to_wav(midi_file, soundfont, output_file):
     Converts a MIDI file to WAV using FluidSynth.
     """
     # FluidSynth command to convert MIDI to WAV
-    print(midi_file)
     command = [
         "fluidsynth",
         "-ni", soundfont,  # Use the specified soundfont
@@ -145,9 +155,11 @@ def apply_effects(wav_file, output_file):
     normalized_audio.export(output_file, format="wav")
 
 # Step 4: Convert MIDI to WAV, apply reverb and normalization
-def process_midi(midi_input, soundfont, output_wav):
-    temp_wav = "temp_output.wav"  # Temporary file to hold the initial WAV output
-    temp_with_reverb = "temp_with_reverb.wav"  # Temporary file for reverb
+def process_midi(midi_input, soundfont, output_wav, temp_name):
+    
+    temp_wav = os.path.join(settings.MEDIA_ROOT, temp_name+"_temp_output.wav")
+
+    temp_with_reverb =  os.path.join(settings.MEDIA_ROOT, temp_name+"_temp_with_reverb.wav") # Temporary file for reverb
 
     # Convert MIDI to WAV
     midi_to_wav(midi_input, soundfont, temp_wav)
