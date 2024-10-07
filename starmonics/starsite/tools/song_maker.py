@@ -83,20 +83,14 @@ d6 uDDD | vd8 |]"""
 
     def make_midi(self, abc_code):
         try:
-            # Gera um nome de arquivo único usando uuid
+
             random_filename = f"{uuid.uuid4()}.mid"
-
-            # Caminho para salvar o arquivo na pasta 'media' usando o MEDIA_ROOT
             midi_filepath = os.path.join(settings.MEDIA_ROOT, random_filename)
-
-            # Converte o código abc para MIDI
             score = converter.parse(abc_code, format='abc')
-
-            # Escreve o arquivo MIDI no caminho especificado
             score.write('midi', fp=midi_filepath)
 
             print(f"MIDI file saved as {midi_filepath}")
-            return midi_filepath  # Retorna o nome do arquivo gerado
+            return midi_filepath 
         except Exception as e:
             print(str(e))
             return False

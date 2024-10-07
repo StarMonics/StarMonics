@@ -15,25 +15,18 @@ class ImageInterpreter:
         }
 
     def encode_image(self):
-    
-        
 
         image_name = os.path.basename(self.image_dir)
 
-        # Abrir a imagem usando Pillow
         with Image.open(self.image_dir) as img:
-            # Redimensionar a imagem para 500x500
+
             img_resized = img.resize((500, 500))
             
-            # Salvar a imagem redimensionada em um buffer de bytes
             buffer = io.BytesIO()
             img_resized.save(buffer, format=img.format)
             buffer.seek(0)
-            
-            # Ler os bytes do buffer
             image_bytes = buffer.read()
             
-            # Codificar a imagem em base64
             encoded_image = base64.b64encode(image_bytes).decode('utf-8')
 
         return encoded_image, image_name
@@ -82,16 +75,7 @@ class ImageInterpreter:
         except requests.RequestException as e:
             return f"Error: API request failed with message: {str(e)}"
 
-    # def interpret_single_image_for_all(self, encoded_images, image_names):
-    #     descriptions = []
-    #     for encoded_image, image_name in zip(encoded_images, image_names):
-    #         result = self.interpret_single_image(encoded_image)
-    #         descriptions.append({
-    #             "image_name": image_name,
-    #             "description": result
-    #         })
-    #     return descriptions
-    
+
     def interpret_single_image_for_all(self, encoded_image, image_name):
    
         result = self.interpret_single_image(encoded_image)

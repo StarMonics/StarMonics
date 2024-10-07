@@ -25,7 +25,7 @@ def home(request):
     if request.method == 'POST':
         if 'imagem' in request.FILES:
             imagem = request.FILES['imagem']
-            # Validação do tipo de arquivo
+
             if not imagem.content_type.startswith('image/'):
                 mensagem = 'Please, send a valid image file.'
             else:
@@ -98,82 +98,69 @@ def generateMusic(imagem):
         
         process_midi(midi_filepath, soundfont, output_wav_file, temp_name)
         
-        # Verifica se o arquivo WAV foi criado corretamente
         if not os.path.exists(output_wav_file):
             print(f"Erro: Arquivo WAV {output_wav_file} não foi criado.")
             return caminho_imagem, description, ''
 
-        # Converte o caminho do arquivo para uma URL acessível
+
         caminho_musica = fs.url(path_relative)
         
         return caminho_imagem, description["description"], caminho_musica
         
         
         
-# Step 1: Convert MIDI to WAV using FluidSynth
+
 def midi_to_wav(midi_file, soundfont, output_file):
     """
     Converts a MIDI file to WAV using FluidSynth.
     """
-    # FluidSynth command to convert MIDI to WAV
+
     command = [
         "fluidsynth",
-        "-ni", soundfont,  # Use the specified soundfont
+        "-ni", soundfont, 
         midi_file,
-        "-F", output_file,  # Output WAV file
-        "-r", "44100"  # Sample rate
+        "-F", output_file, 
+        "-r", "44100"  
     ]
-    
-    # Execute the command
+
     subprocess.run(command, check=True)
 
-# Step 2: Apply reverb using sox
+
 def apply_reverb(wav_file, output_file):
     """
     Applies reverb to a WAV file using the sox tool.
     """
-    # Sox command to apply reverb
+
     command = [
         "sox", wav_file, output_file, "reverb"
     ]
-    
-    # Execute the command
+
     subprocess.run(command, check=True)
 
-# Step 3: Apply normalization and other effects
+
 def apply_effects(wav_file, output_file):
     """
     Normalizes the audio file after reverb.
     """
-    # Load the WAV file
+
     audio = AudioSegment.from_wav(wav_file)
-    
-    # Normalize the audio (optional but ensures even levels)
     normalized_audio = normalize(audio)
-    
-    # Export the final output to WAV
     normalized_audio.export(output_file, format="wav")
 
-# Step 4: Convert MIDI to WAV, apply reverb and normalization
+
 def process_midi(midi_input, soundfont, output_wav, temp_name):
     
     temp_wav = os.path.join(settings.MEDIA_ROOT, temp_name+"_temp_output.wav")
 
     temp_with_reverb =  os.path.join(settings.MEDIA_ROOT, temp_name+"_temp_with_reverb.wav") # Temporary file for reverb
 
-    # Convert MIDI to WAV
     midi_to_wav(midi_input, soundfont, temp_wav)
-
-    # Apply reverb using sox
     apply_reverb(temp_wav, temp_with_reverb)
-
-    # Apply normalization and export as final WAV
     apply_effects(temp_with_reverb, output_wav)
 
-    # Clean up temporary files
+
     os.remove(temp_wav)
     os.remove(temp_with_reverb)
-# Example usage
 
 
         

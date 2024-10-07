@@ -3,7 +3,7 @@ import numpy as np
 from collections import Counter
 import colorsys
 
-# Extended color-to-note mapping with semitones
+
 COLOR_TO_NOTE = {
     'C': (255, 0, 0),          # Red
     'C#': (255, 102, 102),     # Light Red
@@ -24,7 +24,7 @@ def calculate_average_brightness(image):
     Calculate the average brightness of an image.
     Converts the image to grayscale and computes the mean pixel value.
     """
-    grayscale_image = image.convert('L')  # Convert to grayscale
+    grayscale_image = image.convert('L') 
     pixels = np.array(grayscale_image)
     average_brightness = np.mean(pixels)
     return average_brightness
@@ -41,7 +41,7 @@ def calculate_saturation(image):
     Calculate the average saturation of an image.
     Converts the image to RGB, then to HSV to extract saturation values.
     """
-    rgb_image = image.convert('RGB')  # Ensure image is in RGB
+    rgb_image = image.convert('RGB') 
     pixels = np.array(rgb_image)
     # Reshape to a list of pixels
     reshaped_pixels = pixels.reshape(-1, 3)
@@ -58,7 +58,7 @@ def find_nearest_note_color(pixel, color_map):
     min_distance = float('inf')
     nearest_note = None
     for note, color in color_map.items():
-        distance = np.linalg.norm(np.array(pixel) - np.array(color))  # Euclidean distance
+        distance = np.linalg.norm(np.array(pixel) - np.array(color))  
         if distance < min_distance:
             min_distance = distance
             nearest_note = note
@@ -68,13 +68,13 @@ def find_rainbow_colors(image, color_map):
     """
     Find and count the frequency of each rainbow color (including semitones) in the image.
     """
-    rgb_image = image.convert('RGB')  # Ensure image is in RGB
+    rgb_image = image.convert('RGB') 
     pixels = np.array(rgb_image)
-    # Reshape to a list of pixels
+
     reshaped_pixels = pixels.reshape(-1, 3)
     pixel_counter = Counter(map(tuple, reshaped_pixels))
 
-    # Initialize frequency dictionary
+
     color_frequency = {note: 0 for note in color_map.keys()}
 
     for pixel, count in pixel_counter.items():
@@ -82,7 +82,7 @@ def find_rainbow_colors(image, color_map):
         if note:
             color_frequency[note] += count
 
-    # Order colors by frequency
+
     ordered_colors = sorted(color_frequency.items(), key=lambda x: x[1], reverse=True)
     return ordered_colors
 
@@ -90,16 +90,15 @@ def assign_music_features(brightness, ordered_colors, saturation):
     """
     Assign pitch, tone sequence, and tempo based on image features.
     """
-    # Assign pitch based on brightness (A4 = 440Hz is middle range)
-    base_pitch = 440  # Middle A pitch
-    pitch = int(base_pitch * (brightness / 255))  # Scale brightness to pitch range
 
-    # Assign sequence of tones based on color order (already mapped to notes)
+    base_pitch = 440 
+    pitch = int(base_pitch * (brightness / 255)) 
+
+
     tone_sequence = [note for note, freq in ordered_colors if freq > 0]
 
-    # Assign tempo based on saturation (higher saturation, faster tempo)
-    base_tempo = 240  # Base tempo in BPM
-    tempo = int(base_tempo * saturation)  # Scale saturation to tempo
+    base_tempo = 240  
+    tempo = int(base_tempo * saturation) 
 
     return pitch, tone_sequence, tempo
 
@@ -116,15 +115,12 @@ def process_image(image_path, resize = True):
     if resize == True:
         image = resize_image(image)
 
-    # Extract features
     brightness = calculate_average_brightness(image)
     saturation = calculate_saturation(image)
     ordered_colors = find_rainbow_colors(image, COLOR_TO_NOTE)
 
-    # Assign music features
     pitch, tone_sequence, tempo = assign_music_features(brightness, ordered_colors, saturation)
 
-    # Print the results
     print(f"Average Brightness: {brightness:.2f}")
     print("Color Frequencies (Ordered):")
     for color, freq in ordered_colors:
